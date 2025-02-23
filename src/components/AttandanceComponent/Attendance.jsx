@@ -239,7 +239,7 @@ export const Attendance = () => {
 
 
     } finally {
-      setLoadingNumber(falseF)
+      setLoadingNumber(false)
     }
   }
 
@@ -287,6 +287,7 @@ export const Attendance = () => {
       {
         loadingNumber && <p className="text-base text-center w-full py-2 bg-black  text-white"> Searching for user please wait... </p>
       }
+      
       {Error && (
         <ErrorMessage className="mx-auto border z-10 border-red-500 text-center text-[16px] font-semibold">
           <p>{Error}</p>
