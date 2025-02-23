@@ -12,6 +12,8 @@ export const Attendance = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState("");
   const [todaysAttandance, setTodaysAttandance] = useState([])
   const [loading, setLoading] = useState(false)
+  const [loadingNumber, setLoadingNumber] = useState(false)
+  const [AllUsers, setAllUsers] = useState([])
 
   //Hide input state
   const [hide, setHide] = useState(false)
@@ -180,6 +182,8 @@ export const Attendance = () => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
+      setLoading(true)
+
       const response = await fetch(`https://attendance-backend-rosy.vercel.app/delete-users/${userId}`, {
         method: "DELETE",
       });
@@ -187,20 +191,28 @@ export const Attendance = () => {
       const result = await response.json();
       if (response.ok) {
         alert("User deleted successfully!, refresh this page");
-        setUsers(users.filter((user) => user._id !== userId)); // Remove deleted user from state
+        setLoading(false)
+        setAllUsers(users.filter((user) => user._id !== userId)); // Remove deleted user from state
       } else {
         alert(result.message);
+        setLoading(false)
+
       }
     } catch (error) {
       console.error("Error deleting user:", error);
+      setLoading(false)
+
+    } finally {
+      setLoading(false)
+
     }
   };
 
 
 
   const checkPhoneNumber = async () => {
-
     try {
+      setLoadingNumber(true)
       const reqData = await fetch("https://attendance-backend-rosy.vercel.app/attendance", {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
@@ -217,6 +229,7 @@ export const Attendance = () => {
 
       } else {
         setError(resData.message);
+        setLoadingNumber(false)
 
       }
 
@@ -224,8 +237,10 @@ export const Attendance = () => {
       console.log(error.message)
       setError(error.message);
 
-    }
 
+    } finally {
+      setLoadingNumber(falseF)
+    }
   }
 
   if (Error !== "") {
@@ -269,8 +284,11 @@ export const Attendance = () => {
 
   return (
     <>
+      {
+        loadingNumber && <p className="text-base text-center w-full py-2 bg-black  text-white"> Searching for user please wait... </p>
+      }
       {Error && (
-        <ErrorMessage className="mx-auto border border-red-500 text-center text-[16px] font-semibold">
+        <ErrorMessage className="mx-auto border z-10 border-red-500 text-center text-[16px] font-semibold">
           <p>{Error}</p>
         </ErrorMessage>
       )}
@@ -279,7 +297,7 @@ export const Attendance = () => {
         <SuccessMessage message={showSuccessMessage} onClose={handleClose} />
       )}
 
-      <div className={`w-full mx-auto md:w-1/2 bg-white ${!hide ? "grid-cols-1" : "md:grid-cols-2"} relative  p-2 grid  gap-2`}>
+      <div className={`w-full mx-auto  md:w-1/2 bg-white ${!hide ? "grid-cols-1" : "md:grid-cols-2"} relative  p-2 grid  gap-2`}>
 
 
         <div className="w-full border-2 flex gap-1 border-black rounded-md bg-white ">
@@ -408,13 +426,13 @@ export const Attendance = () => {
 
 
       </div>
-      <Count className="rounded-md my-3 md:w-1/2 mx-auto">
+      <Count className="rounded-md my-3 md:w-1/2 mx-auto ">
         <p className="font-semibold text-sm items-center"> Total Attendant For Today:</p>
         <p className="font-bold text-base">{todaysAttandance.length}</p>
       </Count>
 
 
-      <div className="w-full mx-auto md:w-1/2 my-5 flex flex-col gap-3">
+      <div className="w-full mx-auto md:w-1/2 my-5 flex flex-col gap-3 px-2">
         {todaysAttandance && todaysAttandance.length > 0 ? (
           todaysAttandance.map((el) => (
             <p key={el._id} className="flex justify-between text-black">
