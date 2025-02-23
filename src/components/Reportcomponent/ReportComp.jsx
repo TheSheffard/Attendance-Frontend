@@ -241,7 +241,7 @@ export const ReportComp = () => {
                   <td className="py-2 px-4">{info.gender}</td>
                   <td className="py-2 px-4">{info.area}</td>
                   <td className="py-2 px-4">
-                    {new Date(info.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {new Date(info.createdAt).toLocaleTimeString()}
                   </td>
                 </tr>
               ))}

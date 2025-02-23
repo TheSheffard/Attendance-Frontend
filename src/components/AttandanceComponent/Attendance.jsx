@@ -239,7 +239,7 @@ export const Attendance = () => {
   };
 
   useEffect(() => {
-    if (checkInput.phonenumber.trim().length >= 5) {//fire the function that checks for phone number in the db
+    if (checkInput.phonenumber.trim().length >= 8) {//fire the function that checks for phone number in the db
       checkPhoneNumber()
     }
   }, [phoneNumberLength])
@@ -422,7 +422,7 @@ export const Attendance = () => {
 
               <span className="flex items-center gap-3">
                 <Link to={`/edituser/${el?.userId._id}`} className=" text-black  rounded">
-              <BiEdit size={20}/>
+                  <BiEdit size={20} />
                 </Link>
                 <FaTrash className="cursor-pointer" onClick={() => handleDelete(el._id)} size={17} />
 
